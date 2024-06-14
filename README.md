@@ -52,8 +52,7 @@ Simply change the instruction set in the LLM Prompt field to your liking.
 
 Optionally, the path to a text file containing the full set of instructions for the LLM may be provided, allowing for different enhancement algorithms tailored to different use cases and checkpoints.
 
-An example instruction set is provided in the "Prompt1.txt" file.
-
+An example instruction set is provided in the "LLMPE_Example.txt" file.
 **When loading the instruction set from a file, the instruction set from the node textbox is ignored.**
 
 ## Inspecting the LLM enhanced prompt:
