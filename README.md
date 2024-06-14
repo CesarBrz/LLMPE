@@ -32,6 +32,7 @@ LLM Prompt (required): Set of instructions that will guide the LLM in the enhanc
 File path to LLM Prompt (optional): Path to a file containing the set of instructions for the LLM.
 
 #How to Use:
+
 1 - Link LLM output to Positive Conditioning.
 2 - Select the desired LLM Model.
 3 - Paste your Groq API key into the api_key field.
