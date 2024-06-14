@@ -14,7 +14,7 @@ LLMPE relies on the Groq API.
 
 ## Installing:
 
-1 - Copy LLMPE.py into Comfy UI/custom_nodes and restart Comfy Ui.
+1 - Copy LLMPEv01.py into Comfy UI\custom_nodes and restart Comfy UI.
 
 2 - Install the Groq API dependencies going to the command prompt and typing: python -m pip install groq.
 
