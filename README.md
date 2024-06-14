@@ -1,5 +1,5 @@
 # LLMPE
-Custom Node - LLM Prompt Enhancer for Comfy UI
+## LLM Prompt Enhancer for Comfy UI
 
 LLMPE is a simple yet powerful custom node for Comfy UI that enhances prompts.
 Using LLMs and a customizable instruction set, LLMPE allows for easily adding details, stylizing and formatting of Text to Image prompts unleashing the power of advanced LLM features like in-context learning.
@@ -14,12 +14,14 @@ LLMPE relies on the Groq API.
 
 ## Installing:
 
-1 - Copy LLMPEv01.py into Comfy UI\custom_nodes and restart Comfy UI.
+1 - Download [LLMPE 0.1](https://github.com/CesarBrz/LLMPE/blob/main/LLMPEv01.py) and copy it into Comfy UI\custom_nodes folder.
 
-2 - Install the Groq API dependencies going to the command prompt and typing: python -m pip install groq.
+2 - Install the Groq API dependencies going to the command prompt and typing: ```python -m pip install groq```
+
+3 - Restart Comfy UI.
 
 For Comfy UI portable:
-If you are using the portable version of Comfy UI, first navigate to ComfyUI\python_embedded and then run python -m pip install groq.
+If you are using the portable version of Comfy UI, first navigate to ComfyUI\python_embedded and then run ```python -m pip install groq```
 
 ## Overview:
 LLMPE was created to be easy to use and highly customizable! 
@@ -52,8 +54,9 @@ Simply change the instruction set in the LLM Prompt field to your liking.
 
 Optionally, the path to a text file containing the full set of instructions for the LLM may be provided, allowing for different enhancement algorithms tailored to different use cases and checkpoints.
 
-An example instruction set is provided in the "LLMPE_Example.txt" file.
-**When loading the instruction set from a file, the instruction set from the node textbox is ignored.**
+An example instruction set is provided in the [LLMPE_Example.txt](https://github.com/CesarBrz/LLMPE/blob/main/LLMPE_Example.txt) file.
+
+**Important: When loading the instruction set from a file, the instruction set from the node textbox is ignored.**
 
 ## Inspecting the LLM enhanced prompt:
 Using Pythongosssss "Show Text" custom node connected to LLMPE output to inspect the enhanced prompt is recommended.
