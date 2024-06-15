@@ -10,18 +10,23 @@ class LLMPEv01:
         return {
             "required": {
                 "model_name": (["llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"],),
-                "api_key": ("STRING", {
-                    "multiline": False,
-                    "default": "[insert Groq api key]"
-                }),
-                "entrada_texto": ("STRING", {
+                "image_prompt": ("STRING", {
                     "multiline": True,
                     "default": "[Insert image description here]"
                 }),
-                "prompt_template": ("STRING", {
+            },
+            "optional": {
+                "api_environment_variable": ("STRING", {
+                    "multiline": False,
+                    "default": "[Name of the environment variable containing Groq API key]"
+                }),
+                "api_key": ("STRING", {
+                    "multiline": False,
+                    "default": "[Insert Groq API key]"
+                }),
+                "llm_prompt": ("STRING", {
                     "multiline": True,
-                    "default":
-"""You are describing an image to a blind person. Be objective yet detailed.
+                    "default": """You are describing an image to a blind person. Be objective yet detailed.
 You must always follow all these Rules:
 
 ##RULES##
@@ -39,7 +44,7 @@ Rule 6: The [Output] must be between 200 and 300 characters in length.
 
 Rule 7: If the [input] contais expressions following the format "([text] : [float number])" the output must emphasize the information inside the brackets acordingly. the string "(at night :1.5)" means that the expression "at night" is very relevant and a bigger number of words related to it must be very present in the [output]. The expression "(at night :0.6)" means that "at night" is not very relevant and a smaller number of words related to it must be present in the [output].
 
-##RULES##
+##END RULES##
 
 Considering the rules, process the [input] following this algorithm:
 
@@ -48,6 +53,7 @@ Considering the rules, process the [input] following this algorithm:
 [Text] = [Input] translated to English.
 if ([Input] is already in English) {[Text] = [Input]}
 [Output] = AddDetails([Text])
+
 ##END ALGORITHM##
 
 ##EXAMPLES##
@@ -65,13 +71,11 @@ if ([Input] is already in English) {[Text] = [Input]}
 
 [input]:"""
                 }),
-            },
-            "optional": {
                 "llm_prompt_from_file": ("STRING", {
                     "multiline": False,
                     "default": "[Insert path to file containing LLM Prompt. Example: c:\\prompt.txt]"
-                })
-                },
+                }),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -82,17 +86,33 @@ if ([Input] is already in English) {[Text] = [Input]}
 
     CATEGORY = "LLMPE"
 
-    def process_text(self, model_name, api_key, entrada_texto, llm_prompt_from_file, prompt_template):
-        default_file_prompt = "[Insert path to file containing LLM Prompt. Example: c:\\prompt.txt]"
+    def process_text(self, model_name, image_prompt, api_environment_variable="[Name of the environment variable containing Groq API key]",
+                     api_key="[Insert Groq API key]", llm_prompt="[Insert prompt template here]", llm_prompt_from_file="[Insert path to file containing LLM Prompt. Example: c:\\prompt.txt]"):
         
+        # Determinar a chave da API
+        if api_environment_variable != "[Name of the environment variable containing Groq API key]":
+            api_key = os.getenv(api_environment_variable, None)
+            if api_key is None:
+                raise Exception(f"Invalid environment variable: {api_environment_variable}")
+        elif api_key == "[Insert Groq API key]":
+            raise Exception("API key is not provided")
+
+        if not api_key:
+            raise Exception("API key is not provided")
+
+        # Determinar o template do prompt
+        default_file_prompt = "[Insert path to file containing LLM Prompt. Example: c:\\prompt.txt]"
         if llm_prompt_from_file != default_file_prompt and os.path.isfile(llm_prompt_from_file):
             with open(llm_prompt_from_file, 'r') as file:
-                prompt_template = file.read()
+                llm_prompt = file.read()
         elif llm_prompt_from_file != default_file_prompt:
             raise Exception(f"Invalid file path: {llm_prompt_from_file}")
 
+        if llm_prompt == "[Insert prompt template here]":
+            llm_prompt = ""
+
         # Concatenar o prompt template com o texto de entrada
-        full_prompt = f"{prompt_template}\n{entrada_texto}"
+        full_prompt = f"{llm_prompt}\n{image_prompt}".strip()
         response = self.call_llm(full_prompt, api_key, model_name)
         return (response,)
 
